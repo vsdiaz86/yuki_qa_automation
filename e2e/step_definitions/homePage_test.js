@@ -8,6 +8,6 @@ Then('I should be on the correct URL', async () => {
   await HomePage.verifyUrl();
 });
 
-Then('I should see the text {string}', async (text) => {
+Then('the page should contain {string}', async (text) => {
   await HomePage.verifyTextVisible(text);
 });

@@ -1,9 +1,13 @@
 const dotenv = require('dotenv');
 const dotenvParseVariables = require('dotenv-parse-variables');
+const glob = require('glob');
+const path = require('path');
 
 let env = dotenv.config();
 if (env.error) throw env.error;
 env = dotenvParseVariables(env.parsed);
+
+const stepDefs = glob.sync(path.join(__dirname, './step_definitions/**/*.js'));
 
 exports.config = {
   output: './output',
@@ -12,36 +16,45 @@ exports.config = {
       url: env.BASE_URL,
       show: env.SHOW_BROWSER,
       browser: env.BROWSER,
-      waitForNavigation: "domcontentloaded",
+      waitForNavigation: 'domcontentloaded',
       waitForAction: 700,
       chromium: {
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--ignore-certificate-errors']
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--ignore-certificate-errors'
+        ]
       },
       firefox: {
-        args: ['--no-sandbox', '--ignore-certificate-errors']
+        args: [
+          '--no-sandbox',
+          '--ignore-certificate-errors'
+        ]
       }
     },
     CustomHelper: {
       require: './support/helpers/custom_helper.js'
     },
     ResembleHelper: {
-      require: "codeceptjs-resemblehelper",
-      screenshotFolder: "./output/",
-      baseFolder: "./support/screenshots/base/",
-      diffFolder: "./support/screenshots/diff/"
+      require: 'codeceptjs-resemblehelper',
+      screenshotFolder: './output/',
+      baseFolder: './support/screenshots/base/',
+      diffFolder: './support/screenshots/diff/'
     },
     REST: {}
   },
 
   include: {
     I: './steps_file.js',
-    HomePage: './page_objects/home_page.js'
+    HomePage: './page_objects/home_page.js',
+	InvoicePage: './page_objects/invoice_page.js',
+	PrivacyPage: './page_objects/privacy_page.js'
   },
 
   gherkin: {
-  features: './features/**/*.feature',
-  steps: ['./step_definitions/**/*.js']
-    
+    features: './features/**/*.feature',
+    steps: stepDefs
   },
 
   plugins: {

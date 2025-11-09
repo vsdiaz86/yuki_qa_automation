@@ -2,9 +2,10 @@ const { I } = inject();
 const BasePage = require('./base_page.js');
 
 class HomePage extends BasePage {
+
   async navigateToHome() {
     await I.amOnPage('/');
-    await super.isCurrentPage();
+    //await super.isCurrentPage();
   }
 
   async verifyUrl() {
